@@ -1,0 +1,66 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header" style="box-shadow: 0px 1px #888888;">Test Types</h2>
+            </div>
+        </div>
+        <div class="panel" style="margin-top: -15px;  border: thin solid lightgrey; box-shadow: 1px 1px 1px 1px #888888;">                       
+            <div class="panel-body" style=" border: thin solid lightgrey;">
+                       
+
+            </div>
+            <div style="height:740px; overflow: scroll">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Test Type Name</th>
+                            <th>Test Category</th>
+                            <th>Target TAT</th>
+                            <th>Test Short Name</th>
+                            <th>Analysis Frequency</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% 
+                            counter = 0 
+                            freq =0
+                        %>
+                        <% @test_type[0].each do |type| %>
+                            <% freq = @test_type[1][counter] %>   
+                                <tr>
+                                    <td><%= type.tst_name %></td>
+                                    <td><%= type.cat_name %></td>
+                                    <td><%= type.tat %></td>
+                                    <td><%= type.short %></td>
+                                    <td>
+                                        <span style="color:black" class="btn btn-sm btn-warning" id="<%= counter %>" > <%= freq+"%" %> </span>
+                                    </td>
+                                </tr>
+                            <% counter = counter + 1 %>
+                        <% end %>
+                                         
+                    </tbody>
+                </table>    
+            </div>
+
+        </div>  
+    </div>
+</div>
+
+
+<script>
+    var id = '<%= counter %>';
+    
+    for(var i = 0; i<id; i = i + 1)
+    { 
+       
+        var fre = document.getElementById(i);
+        fre.style.width = fre.innerHTML;
+       
+    }
+
+</script>

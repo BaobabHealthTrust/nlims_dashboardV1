@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NlimsDashboardv1</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%= yield %>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">NLIMS Dashboard</a>
+            </div>
+
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+                <% if @login != true %>
+                    <!-- Top Navigation: Left Menu -->
+                    <ul class="nav navbar-nav navbar-left navbar-top-links">
+                        <li><a href="/"><i class="fa fa-home fa-fw"></i> Home</a></li>
+                    </ul>
+
+                
+                
+                    <!-- Top Navigation: Right Menu -->
+                    <ul class="nav navbar-right navbar-top-links">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-user fa-fw"></i> <%= session[:user] %> <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                
+                                <li><a href="/setting/settings"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="/"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                    </ul>
+                <% end %>
+            <!-- Sidebar -->
+            <% if @doing_settings == false %>
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">                       
+                            <li>
+                                <a href="/home"><i class="fa fa-home fa-fw"></i> Home<span></span></a>
+                                <a href="#"><i class="fa fa-sitemap fa-fw"></i> Reports<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="/report/moh_report">MoH Diagonistic Report</a>
+                                    </li>
+                                  
+                                </ul>
+                                <a href="#"><i class="fa fa-sitemap fa-fw"></i> Test Catelog<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="/testcatelog/specimen_types">Specimen Types</a>
+                                    </li>
+                                    <li>
+                                        <a href="/testcatelog/test_types">Test Types </a>                                   
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            <% else %>
+                <% if @login == true %>
+
+                <% else %>
+                    <div class="navbar-default sidebar" role="navigation">
+                        <div class="sidebar-nav navbar-collapse">
+                            <ul class="nav" id="side-menu">                       
+                                <li>
+                                <a href="/home"><i class="fa fa-home fa-fw"></i> Home<span></span></a>
+                                    <a href="/setting/migrate_data"><i class="fa fa-sitemap fa-fw"></i> Data Migration</a>
+                                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Data Anomalies<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="/unresolved_specimen">Specimen Types <span class="badge" style="background-color:green"> <%= @sample_types %> </span></a>
+                                        </li>
+                                        <li>
+                                            <a href="/unresolved_test_types">Test Types <span style="background-color:green"class="badge"> <%= @test_types %> </span></a>                                   
+                                        </li>
+                                        <li>
+                                            <a href="/unresolved_measures">Measures <span style="background-color:red"class="badge"> <%= @measures %></span></a>                                   
+                                        </li>
+                                    </ul>
+                                    
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+        </nav>

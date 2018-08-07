@@ -1,0 +1,21 @@
+development: &development
+  protocol: 'http'
+  host: localhost
+  port: 5984
+  prefix: lims
+  suffix: repo
+  username: root
+  password: amin9090!
+
+test:
+  <<: *development
+  suffix: test
+
+production:
+  protocol: 'http'
+  host: localhost
+  port: 5984
+  prefix: nlims_dashboardv1
+  suffix: production
+  username: root
+  password: 123

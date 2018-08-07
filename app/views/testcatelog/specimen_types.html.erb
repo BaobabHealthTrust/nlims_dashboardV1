@@ -1,0 +1,61 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header" style="box-shadow: 0px 1px #888888;">Specimen Types</h2>
+            </div>
+        </div>
+        <div class="panel" style="margin-top: -15px; border: thin solid lightgrey;  box-shadow: 1px 1px 1px 1px #888888;">                       
+          
+            <div>
+                <table class="table" id="tb">
+                    <thead>
+                        <tr>
+                            <th>Specimen Type Name</th>
+                            <th>Analysis Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% 
+                        counter = 0 
+                        freq =0
+                    %>
+                        <% @specimen_type[0].each do |type| %>
+                            <% freq = @specimen_type[1][counter] %>   
+                                <tr>
+                                    <td><%= type.spc_name %></td>
+                                    <td> <span style="color:black" class="btn btn-sm btn-warning" id="<%= counter %>" > <%= freq+"%" %> </span> </td>
+                                </tr>
+                            <% counter = counter + 1 %>
+                        <% end %>
+                            
+                    </tbody>
+                </table>    
+            </div>
+
+        </div>  
+    </div>
+</div>
+
+
+<script type="text/javascript">
+                       
+
+    function loadTestTypes(type)
+    {   alert(type);
+        window.location = "/load_specimen_test_types?specimen_type=" + type;
+    }
+
+
+    var id = '<%= counter %>';
+    
+    for(var i = 0; i<id; i = i + 1)
+    { 
+       
+        var fre = document.getElementById(i);
+        fre.style.width = fre.innerHTML;
+       
+    }
+</script>

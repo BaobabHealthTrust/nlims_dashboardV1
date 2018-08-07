@@ -1,0 +1,37 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header" style="box-shadow: 0px 1px #888888;">Unresolved Test Measures</h2>
+            </div>
+        </div>
+        <div class="panel" style="height:750px; overflow:scroll ;margin-top: -15px;  border: thin solid lightgrey; box-shadow: 1px 1px 1px 1px #888888;">                       
+         
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sending Facility</th>                          
+                            <th>Measure Name</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <% @data.each do |da| %>
+                            
+                            <tr>
+                                <td> <%= da.fac %> </td>
+                                <td> <%= da.tes %></td>
+                                <td> <button class="btn btn-sm btn-primary"> resolve </button> </td>
+                            </tr>
+                        <% end %>
+                                         
+                    </tbody>
+                </table>    
+            </div>
+
+        </div>  
+    </div>
+</div>

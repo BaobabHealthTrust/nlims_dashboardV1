@@ -1,0 +1,177 @@
+
+
+            <!-- Page Content -->
+            <div id="page-wrapper">
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h2 class="page-header">Home</h2>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div>
+                            <h3 style="background-color: #37474F; color: skyblue;padding: 5px; margin-top:-5px;">Sites Data Syncing Status </h3>
+                        </div>
+                        <div style="border: thin solid lightgrey; background-color: lightgrey;height:750px;">
+                            <div id="main" class="col-sm-5" style="height: 750px;">
+
+                            </div>
+                            <div id="status-details" class="col-sm-6" style="margin-left: 5%; height: 40%;box-shadow: 5px 10px 8px 10px #888888; margin-top:40px; background-color: white;">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Site</th>
+                                            <th>Status</th>
+                                            <th>Frequency</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% @sites.each do |site| %>
+                                            <% if site['enabled'] && site['sync_status'] %>
+                                                <tr>
+                                                    <td><%= site['name'] %></td>
+                                                    <td style="color: green">Online</td>
+                                                    <td>-----</td>
+                                                </tr>
+                                            <% elsif site['enabled'] && site['sync_status'] == false %>
+                                                <tr>
+                                                    <td><%= site['name'] %></td>
+                                                    <td style="color: red">offline</td>
+                                                    <td>----</td>
+                                                </tr>
+                                            <% end %>
+                                        <% end %>
+											
+									</tbody>
+                                </table>    
+                            </div>
+                        </div>
+                    </div>
+                   
+
+                </div>
+            </div>
+        </div>
+    </body>
+   
+
+
+
+
+    <script type="text/javascript">
+  
+    var zoomlevel = 1;
+    var currentSite = "";
+    var alerts = {};
+    var sitesErrors = {};
+
+
+
+    var loader = d3.xml("/images/Malawi.svg", function(xml) {
+        document.getElementById("main").appendChild(xml.documentElement);
+
+        <% @sites.each do |site|
+        
+            refPoints = [-9.331537, -17.158189, 32.674051, 35.969950];
+            offsets = [10, 295, 10, 710];
+            x = site['x'].to_f
+            y = site['y'].to_f
+
+            x = ((offsets[1] - offsets[0]) * ((x.abs - refPoints[2].abs) / (refPoints[3].abs - refPoints[2].abs)))
+
+            y = ((offsets[3] - offsets[2]) * ((y.abs - refPoints[0].abs) / (refPoints[1].abs - refPoints[0].abs)))
+
+        %>
+
+            var color = "red";
+
+            <%
+            if site['sync_status'] == true%>
+                color = 'green';
+            <% end %>
+                
+            d3.select("#malawi").append("circle")
+                    .style("stroke", "white")
+                    .style("stroke-width", "1px")
+                    .style("fill", color)
+                    .style("margin", "auto")
+                    .attr("r", 6)
+                    .attr("class", "circle")
+                    .attr("cx", "<%= x %>")
+                    .attr("cy", "<%= y %>")
+                    .attr("color", color)
+                    .attr("id", "<%= site['site_code'].downcase %>")
+                    .attr("tag", "<%= site['name'] %>")
+                    .on("mousedown", function(){
+                        // window.parent.location = "/report/site_summary?site_name=" + this.getAttribute("tag")
+                    })
+                    .on("mouseover", function(){
+
+                        d3.select(".circle").attr("r", 7);
+                        d3.select("#" + this.id).attr("r", 12).style("z-index", "100");
+
+                        return tooltip.style("visibility", "visible");
+                    })
+                    .on("mousemove", function(){
+                        return tooltip.style("top",
+                                        (d3.event.pageY-10)+"px")
+                                .style("left", (d3.event.pageX+20)+"px")
+                                .text(getSiteInfo(this.id));
+                    })
+                    .on("mouseout", function(){
+                        d3.select("#" + this.id).attr("r", 7).style("z-index", "10")
+                                .style("fill", this.getAttribute("color"));
+                        return tooltip.style("visibility", "hidden");
+                    });
+
+        <% end %>
+    
+    });
+
+    var tooltip = d3.select("body")
+            .append("div")
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("background", "#f6f3d7")
+            .style("padding", "5px")
+            .style("border", "1px solid #000")
+            .style("border-radius", "5px")
+            .text("Tooltip");
+
+    function getSiteInfo(id){
+        var result = id;
+
+        if(document.getElementById(id)){
+            result = document.getElementById(id).getAttribute("tag");
+            if (sitesErrors[result]){
+                result = result + ",   " + sitesErrors[result];
+            }else{
+                result = result;
+            }
+        }
+
+        return result;
+    }
+
+    function resizeMap(){
+        zoomlevel = 1;
+
+        d3.select('#region').attr('transform','scale(' + zoomlevel + ')')
+                .style("background", "white")
+
+    }
+
+
+
+    </script>
+
+
+
+
+
+
+</html>
+

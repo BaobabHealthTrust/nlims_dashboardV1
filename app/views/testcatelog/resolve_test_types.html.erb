@@ -1,0 +1,185 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header" style="box-shadow: 0px 1px #888888;">Resolving Test Type <span style="color:green; font-weight:bold;"> <%= @test_type  %> </span> </h2>
+            </div>
+        </div>
+        <div class="panel" style="height:750px; overflow:scroll ;margin-top: -15px;  border: thin solid lightgrey; box-shadow: 1px 1px 1px 1px #888888;">                       
+         
+            <div class="col-sm-5" >
+                <table class="table" style="margin-top:5px;">
+                    <thead style="border: thin solid lightgrey">
+                        <tr>
+                            <th>Posible Matches <span id="info" style="float:right; display:none"> </span> </th>                          
+                               
+                        </tr>
+                    </thead>
+                    <tbody style="border: thin solid lightgrey;">
+                   
+                        <% if @data == false %>
+                            <% checker = true %>
+                            <tr> 
+                                <td> <span style="color: red"> no possible matches found </span> </td>
+                            </tr>
+                        <% else %>
+                            <% @data.each do |da| %>
+                            
+                                <tr onclick="capture_value('<%= da.sample %>')"> 
+                                    <td> <%= da.sample %> </td>                            
+                                </tr> 
+                            <% end %>
+                        <% end %>
+                        
+
+                    </tbody>
+                </table>    
+            </div>
+            <div class="col-sm-5" style="margin-top:5px;"> 
+                <button id="merge" onclick="merge()" class="btn btn-primary"> merge </button>  
+                <button id="add" class="btn btn-success" data-toggle="modal" data-target="#myModal"> add as new </button> 
+                <button id="add" onclick="window.location='/unresolved_specimen'" class="btn btn-primary"> << back </button>
+            </div>  
+        </div>  
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">        
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">More details about test </h4>
+        </div>
+        <div class="modal-body">
+            <form class="form">
+                <div class="form-group">
+                    <label>Test Category </label>
+                        <select class="form-control" id="cats">
+                        
+                        </select>
+                </div>
+                <div class="form-group">
+                    <label> Target TAT mins/hrs/days</label>
+                    <input class="form-control" type="text" name="tat" id="tat">
+                </div>
+                <div class="form-group">
+                    <label> Short Name </label>
+                    <input class="form-control" type="text" name="short" id="sht" >
+                </div>
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" onclick="add()" class="btn btn-default" data-dismiss="modal">Done</button>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    var specimen_type = "";
+    function capture_value(value)
+    { 
+        specimen_type = value;
+    }
+
+    function merge()
+    {
+        if (specimen_type.length == 0)
+        {
+            var t = document.getElementById("info");
+            t.style.display ="inline";
+            t.innerHTML = "please select a match for merging";
+            t.style.color = "red";
+        }
+        else
+            {
+                var value_to_add = '<%= @test_type %>';
+                var t = document.getElementById("info");
+                t.style.display ="none";
+                var url = "/merge_resolved?type=test_type" + "&merge_value=" + specimen_type + "&actual_value=" + value_to_add;
+                jQuery.ajax({
+                            async: false,
+                            url: url,
+                            type: 'post',
+                            success: function(res)
+                            {
+                                var t = document.getElementById("info");
+                                window.location = "/unresolved_specimen";
+                            },
+                            error: function(err)
+                            {
+                                alert("bad");
+                            }
+                }); 
+            }
+    }
+
+    if ('true' == '<%= checker %>')
+        {    
+            document.getElementById("merge").style.display = "none";
+        }
+
+
+    function add()
+    {   var cat = document.getElementById("cats").value;
+        var tat = document.getElementById("tat").value;
+        var sht = document.getElementById("sht").value;
+
+        var value_to_add = '<%= @test_type %>';
+        var url = "/add_resolved?type=test_type" + "&value=" + value_to_add + "&category=" + cat + "&tat=" + tat + "&short_name=" + sht;
+        jQuery.ajax({
+                    async: false,
+                    url: url,
+                    type: 'post',
+                    success: function(res)
+                    {
+                       window.location = "/unresolved_test_types";
+                    },
+                    error: function(err)
+                    {
+                        alert("bad");
+                    }
+        }); 
+    }
+
+   
+    
+
+    var url = "/test_Categories";
+        jQuery.ajax({
+                    async: false,
+                    url: url,
+                    success: function(res)
+                    {
+                      var itm = JSON.parse(res);
+                     
+                      for (var r in itm)
+                      {
+                        var name = itm[r].c_name;
+                        var id = itm[r].c_id;
+                        var sel = document.getElementById("cats");
+                        var opt = document.createElement("option");
+
+                        opt.innerHTML = name;
+                        opt.value = id;
+                        sel.appendChild(opt);
+                      }
+                    },
+                    error: function(err)
+                    {
+                        alert("bad");
+                    }
+        }); 
+
+</script>
