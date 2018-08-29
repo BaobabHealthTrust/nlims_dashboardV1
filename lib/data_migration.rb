@@ -1,61 +1,87 @@
 module DataMigration
+    
 
     def self.load_tests
         tests = File.read("#{Rails.root}/public/master_tests.sql")
-        configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
-        client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
-        client.query(tests)
+        status = false
+        if tests.length != 26
+            configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
+            client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
+            client.query(tests)
+            status = true
+        end
         
-        return "fine"
+        return status
     end
      
     
     def self.load_tests_results
+        
         tests = File.read("#{Rails.root}/public/master_test_results.sql")
-        configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
-        client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
-        client.query(tests)
+        status = false
+        if tests.length != 33
+            configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
+            client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
+            client.query(tests)
+            status = true
+        end
     
-        return "fine"
+        return status
     end
 
     def self.load_orders
         tests = File.read("#{Rails.root}/public/master_orders.sql")
-        configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
-        client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
-        client.query(tests)
-    
-        return "fine"
+        status = false
+        if tests.length != 27
+            configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
+            client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
+            client.query(tests)
+            status = true
+        end
+
+        return status
     end
 
 
     def self.load_slave_orders
         tests = File.read("#{Rails.root}/public/slave_orders.sql")
-        configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
-        client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
-        client.query(tests)
+        status = false
+        if tests.length != 33
+            configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
+            client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
+            client.query(tests)
+            status = true
+        end
     
-        return "fine"
+        return status
     end
 
 
     def self.load_slave_tests
-        tests = File.read("#{Rails.root}/public/slave_tests.sql")
-        configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
-        client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
-        client.query(tests)
+        tests = File.read("#{Rails.root}/public/slave_tests.sql")        
+        status = false
+        if tests.length != 32
+            configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
+            client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
+            client.query(tests)
+            status4 = true
+        end
     
-        return "fine"
+        return status
     end
 
 
     def self.load_slave_test_results
         tests = File.read("#{Rails.root}/public/slave_test_results.sql")
-        configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
-        client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
-        client.query(tests)
+        status = false
+        if tests.length != 39
+            configs = YAML.load_file("#{Rails.root}/config/database.yml")[Rails.env]    
+            client = Mysql2::Client.new(:host => "localhost", :username => "#{configs['username']}", :password => "#{configs['password']}", :database => "#{configs['database']}")
+            client.query(tests)
+            status = true
+        end
     
-        return "fine"
+        return status
     end
 
 
@@ -162,6 +188,27 @@ module DataMigration
    
     end
     
+    def self.track_test_number
+        num = Test.find_by_sql("SELECT id AS tst_id FROM tests ORDER BY id DESC limit 1")
+        if num.blank?
+            num = 1
+        else
+            num = num[0]["tst_id"] + 1
+        end
+       return num 
+    end
+
+
+    def self.track_test_results_number
+        num = Test.find_by_sql("SELECT id AS tst_id FROM test_results ORDER BY id DESC limit 1")
+        if num.blank?
+            num = 1
+        else
+            num = num[0]["tst_id"] + 1
+        end
+        return num + 1
+    end
+
 
     def self.load_data(year,quarter)      
         quarter = DataMigration.generate_quater(quarter)
@@ -173,40 +220,42 @@ module DataMigration
         checker = 0
         order_values = []
         order_counter = 0
-        test_counter = 260589
+        test_counter = track_test_number
         trail_counter = 0
         results_counter = 0
         patient_counter =0
         master_order_counter = 0 
         master_test_Count = 0
         test_Count = 0
-        test_results_counter = 422867
-        
+        test_results_counter = track_test_results_number
+      
 
         start_time = year + quarter[0].to_s + "070000"
         end_time = year + quarter[1].to_s + "070000"
+        measure_counter = 0
+        measure_counter1 = 0
         Couchorder.generic.startkey([start_time]).endkey([end_time]).each do |order|
             empty = "'" + "'"
           
             #order general details
-            tracking_number = order['_id']
-            order_status = order['status']
-            sending_facility = "'" + order['sending_facility'] + "'"
-            receiving_lab = "'" + order['receiving_facility'] + "'"
-            sample_type = order['sample_type']
-            date_drawn = order['date_drawn']
-            date_time = order['date_time']
-            date_received = order['date_received']
-            priority = order['priority']
-            order_location = order['order_location']
-            district = order['district']
-            who_order_fname = order['who_order_test']['first_name']
-            who_order_lname = order['who_order_test']['last_name']
-            who_order_id = order['who_order_test']['id_number']
-            who_order_phone = order['who_order_test']['phone_number']
+            tracking_number = escape_characters(order['_id'])
+            order_status = escape_characters(order['status'])
+            sending_facility = "'" + escape_characters(order['sending_facility']) + "'"
+            receiving_lab = "'" + escape_characters(order['receiving_facility']) + "'"
+            sample_type = escape_characters(order['sample_type'])
+            date_drawn = escape_characters(order['date_drawn'])
+            date_time = escape_characters(order['date_time'])
+            date_received = escape_characters(order['date_received'])
+            priority = escape_characters(order['priority'])
+            order_location = escape_characters(order['order_location'])
+            district = escape_characters(order['district'])
+            who_order_fname = escape_characters(order['who_order_test']['first_name'])
+            who_order_lname = escape_characters(order['who_order_test']['last_name'])
+            who_order_id = escape_characters(order['who_order_test']['id_number'])
+            who_order_phone = escape_characters(order['who_order_test']['phone_number'])
             dispatcher_id =  "#{"'" + '0' + "'"}"
-            dispatcher_fname = order['who_dispatched']['first_name'] rescue empty
-            dispatcher_lname = order['who_dispatched']['last_name'] rescue empty
+            dispatcher_fname = escape_characters(order['who_dispatched']['first_name']) rescue empty
+            dispatcher_lname = escape_characters(order['who_dispatched']['last_name']) rescue empty
             dispatcher_phone = "#{"'" + '+265' +"'"}"
             art_start_date = '20180101020000' if order['art_start_date'].blank? 
             art_start_date = order['art_start_date'] if !order['art_start_date'].blank?
@@ -217,7 +266,7 @@ module DataMigration
             sample_data_checker = false
            
             
-
+            
             if receiving_lab.blank?
 
             elsif date_drawn.blank?
@@ -239,39 +288,39 @@ module DataMigration
                 end
 
                 if sample_data_checker == false
-                    sample_type_checker = "resolved"
-                    sending_facility_check = "resolved"
-                    receiving_facility_check = "resolved"
-                    order_location_check = "resolved"
-                    sample_status_check = "resolved"
+                    sample_type_checker = "'" + escape_characters(sample_type) + "'"
+                    sending_facility_check = "'" + escape_characters(sending_facility) + "'"
+                    receiving_facility_check = "'" + escape_characters(receiving_lab) + "'"
+                    order_location_check = "'" + escape_characters(order_location) + "'"
+                    sample_status_check = "'" + escape_characters(order_status) + "'"
 
                     if sample_checker == false
-                        sample_type_checker = "not-resolved"
+                        sample_type_checker = "'" + "not-resolved" + "'"
                     end
 
                     if sending_facility_checker == false
-                        sending_facility_check = "not-resolved"
+                        sending_facility_check = "'" + "not-resolved" + "'"
                     end
 
                     if receiving_facility_checker == false
-                        receiving_facility_check = "not-resolved"
+                        receiving_facility_check = "'" + "not-resolved" + "'"
                     end
                     
                     if order_location_checker == false
-                        order_location_check = "not-resolved"
+                        order_location_check = "'" + "not-resolved" + "'"
                     end
 
                     if sample_status_checker == false
-                        sample_status_check = "not-resolved"
-                    end
+                        sample_status_check = "'" +  "not-resolved" + "'"
+                     end
                     
                     empty = "'" + "'"
                     File.open("#{Rails.root}/public/slave_orders.sql","a") do |txt|                 
                         if (order_counter==0)
-                            txt.puts "\r" + "(#{"'" + self.escape_characters(tracking_number) + "'"},#{sending_facility},#{"'" + sending_facility_check + "'"},#{receiving_lab},#{"'" + receiving_facility_check + "'"},#{"'" + self.escape_characters(sample_type) + "'"},#{"'" + sample_type_checker + "'"},#{"'" + self.escape_characters(who_order_fname) + "'" rescue empty},#{"'" + self.escape_characters(who_order_lname) + "'" rescue empty},#{"'" + self.escape_characters(who_order_id) + "'" rescue empty},#{"'" + self.escape_characters(who_order_phone) + "'" rescue 0},#{art_start_date},#{"'" + self.escape_characters(order['date_dispatched']) + "'" rescue empty},#{"'" + self.escape_characters(date_drawn) + "'"},#{"'" + self.escape_characters(date_received) + "'"},#{"'" + self.escape_characters(date_drawn) + "'"},#{"'" + self.escape_characters(district) + "'"},#{"'" + self.escape_characters(order_location) + "'"},#{"'" + order_location_check + "'"},#{"'" + self.escape_characters(priority) + "'"},#{"'" + self.escape_characters(order_status) + "'"},#{"'" + sample_status_check + "'"})"
+                            txt.puts "\r" + "(#{"'" + self.escape_characters(tracking_number) + "'"},#{sending_facility},#{ sending_facility_check },#{receiving_lab},#{receiving_facility_check},#{"'" + self.escape_characters(sample_type) + "'"},#{sample_type_checker },#{"'" + self.escape_characters(who_order_fname) + "'" rescue empty},#{"'" + self.escape_characters(who_order_lname) + "'" rescue empty},#{"'" + self.escape_characters(who_order_id) + "'" rescue empty},#{"'" + self.escape_characters(who_order_phone) + "'" rescue 0},#{art_start_date},#{"'" + self.escape_characters(order['date_dispatched']) + "'" rescue empty},#{"'" + self.escape_characters(date_drawn) + "'"},#{"'" + self.escape_characters(date_received) + "'"},#{"'" + self.escape_characters(date_drawn) + "'"},#{"'" + self.escape_characters(district) + "'"},#{"'" + self.escape_characters(order_location) + "'"},#{order_location_check },#{"'" + self.escape_characters(priority) + "'"},#{"'" + self.escape_characters(order_status) + "'"},#{sample_status_check },'not_resolved')"
                             order_counter = order_counter + 1
                         else
-                            txt.puts "\r" + ",(#{"'" + self.escape_characters(tracking_number) + "'"},#{sending_facility},#{"'" + sending_facility_check + "'"},#{receiving_lab},#{"'" + receiving_facility_check + "'"},#{"'" + self.escape_characters(sample_type) + "'"},#{"'" + sample_type_checker + "'"},#{"'" + self.escape_characters(who_order_fname) + "'" rescue empty},#{"'" + self.escape_characters(who_order_lname) + "'" rescue empty},#{"'" + self.escape_characters(who_order_id) + "'" rescue empty},#{"'" + self.escape_characters(who_order_phone) + "'" rescue 0},#{art_start_date},#{"'" + self.escape_characters(order['date_dispatched']) + "'" rescue empty},#{"'" + self.escape_characters(date_drawn) + "'"},#{"'" + self.escape_characters(date_received) + "'"},#{"'" + self.escape_characters(date_drawn) + "'"},#{"'" + self.escape_characters(district) + "'"},#{"'" + self.escape_characters(order_location) + "'"},#{"'" + order_location_check + "'"},#{"'" + self.escape_characters(priority) + "'"},#{"'" + self.escape_characters(order_status) + "'"},#{"'" + sample_status_check + "'"})"
+                            txt.puts "\r" + ",(#{"'" + self.escape_characters(tracking_number) + "'"},#{sending_facility},#{sending_facility_check},#{receiving_lab},#{receiving_facility_check },#{"'" + self.escape_characters(sample_type) + "'"},#{sample_type_checker},#{"'" + self.escape_characters(who_order_fname) + "'" rescue empty},#{"'" + self.escape_characters(who_order_lname) + "'" rescue empty},#{"'" + self.escape_characters(who_order_id) + "'" rescue empty},#{"'" + self.escape_characters(who_order_phone) + "'" rescue 0},#{art_start_date},#{"'" + self.escape_characters(order['date_dispatched']) + "'" rescue empty},#{"'" + self.escape_characters(date_drawn) + "'"},#{"'" + self.escape_characters(date_received) + "'"},#{"'" + self.escape_characters(date_drawn) + "'"},#{"'" + self.escape_characters(district) + "'"},#{"'" + self.escape_characters(order_location) + "'"},#{ order_location_check },#{"'" + self.escape_characters(priority) + "'"},#{"'" + self.escape_characters(order_status) + "'"},#{ sample_status_check},'not-resolved')"
                         end
                     end
                 end
@@ -294,12 +343,11 @@ module DataMigration
                     test_type_checker = false
                     measure_id = 0
                     measure_checker = false
-                    measure_counter = 0
-                    measure_counter1 = 0
+                    
                     test_counter = test_counter + 1
                     test_status_id = 0
                     test_status_checker = "resolved"
-                    
+                                       
 
                     res = TestType.check_test_type(test_type)
 
@@ -312,7 +360,7 @@ module DataMigration
                         length = test_result.length
                         test_result = test_result[test_result.keys[length - 1]]
                         test_status = test_result['test_status']
-                        remarks = test_result['remarks']
+                        remarks = escape_characters(test_result['remarks'])
                         datetime_completed = test_result['datetime_completed']
                         datetime_started = test_result['datetime_started']
                         results = test_result['results'] rescue [ ]
@@ -326,10 +374,9 @@ module DataMigration
                             datetime_completed = date_time
                         end
 
-                        tt = "20180001083256".to_date rescue date_time
-                        
+                     
                             begin
-                                datetime_completed.to_date
+                                datetime_completed.to_date rescue date_time
                             rescue ArgumentError
                                 datetime_completed = date_time
                             end
@@ -347,7 +394,7 @@ module DataMigration
 
                                 results.each do |rst,value|
                                     measure = rst
-                                    measure_value = value
+                                    measure_value = escape_characters(value)
                                     res = Measure.check_measure(measure)
                                     measure_checker = false
                                     if res == true
@@ -551,17 +598,17 @@ module DataMigration
             #end
         
             appendSemicolon()
-            
+          
             
         end  
-        
+    
     end
 
 
 
     def self.generate_quater(quater)
 
-        quaters = {
+        quaters = { 
 			"q1" => ["0101","0331"],
 			"q2" => ["0401","0630"],
 			"q3" => ["0701","0930"],

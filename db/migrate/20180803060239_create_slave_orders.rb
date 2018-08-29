@@ -24,6 +24,7 @@ class CreateSlaveOrders < ActiveRecord::Migration[5.2]
         t.string :priority
         t.string :order_status
         t.string :order_status_resolved_to
+        t.string :order_resolve_status
       
     end
   end

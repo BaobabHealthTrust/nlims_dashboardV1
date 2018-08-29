@@ -19,15 +19,18 @@ class SettingController < ApplicationController
     def migrate
         year = params[:year]
         quarter = params[:quarter]
+       
+        DataMigration.check_files
+        DataMigration.createHeaders
+        DataMigration.load_data(year,quarter)
+        DataMigration.load_orders
+        DataMigration.load_tests
+        DataMigration.load_tests_results
+        DataMigration.load_slave_orders
+        DataMigration.load_slave_tests
         DataMigration.load_slave_test_results
-        #DataMigration.load_slave_tests
-        #DataMigration.load_slave_orders
-        #DataMigration.load_tests_results
-        #DataMigration.load_tests
-        #DataMigration.load_orders
-        #DataMigration.check_files
-        #DataMigration.createHeaders
-        #DataMigration.load_data(year,quarter)
+
     end
+    
 
 end
