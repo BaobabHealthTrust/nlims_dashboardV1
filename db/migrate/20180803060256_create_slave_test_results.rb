@@ -6,7 +6,7 @@ class CreateSlaveTestResults < ActiveRecord::Migration[5.2]
      t.string :test_type
      t.string :measure
      t.string :measure_resolved_to
-     t.string :measure_value
+     t.string(20000) :measure_value
      t.string :resolving_status
     end
   end
