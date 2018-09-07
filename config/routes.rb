@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   post "/merge_resolved"            => "testcatelog#merge_resolved"
   get  "/resolve_test_types"        => "testcatelog#resolve_test_types"
   get  "/test_Categories"           => "testcatelog#test_Categories"
+  post "/home/add_account"       => "home#add_account"
+  get  "/home/get_location"      => "home#get_location"
 
 
 end

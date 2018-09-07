@@ -43,18 +43,45 @@ class HomeController < ApplicationController
 		return BCrypt::Password.new(password)
 	end
 
+        
+    def add_account
+        username = params[:username]
+        password = params[:password]
+        email   = params[:email]
+        phone   = params[:phone]
+        location = params[:location]
+        name    = params[:name]
+        status = false
 
-    def create_account
+        encr_password = encrypt_password(password)
 
+        if check_user(username) == true
+            user = User.new
+            user.app_name = "dashboard user"
+            user.partner = name
+            user.password = encr_password
+            user.username = username
+            user.location = location
+            user.token = ""
+            user.token_expiry_time = Time.new
+            user.save()
+            status = true
+        end        
+        render plain: status and return  
     end
 
-
-    def load_account_details
-
+    def check_user(username)
+        rs = User.where(:username => username)
+        if !rs.blank?
+            return false
+        else
+            return true
+        end
     end
 
-    def edit_account
-
+    def get_location()
+        rs = Site.find_by_sql("SELECT DISTINCT sites.district AS dist FROM sites")
+        render plain: rs.to_json and return
     end
 
 
