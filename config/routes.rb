@@ -5,6 +5,13 @@ Rails.application.routes.draw do
 
   get "/report/moh_report" => "report#moh_report"
   get "report/retrieve_data_moh_report" => "report#retrieve_data_moh_report"
+  get "/report/retrieve_landing_page_data" => "report#retrieve_landing_page_data"
+  get "/report/retrieve_total_orders"    => "report#retrieve_total_orders"
+  get "/report/retrieve_completed_tests" => "report#retrieve_completed_tests"
+  get "/report/retrieve_pending_tests"   => "report#retrieve_pending_tests"
+  get "/report/retrieve_rejected_tests"  => "report#retrieve_rejected_tests"
+  get "/report/retrieve_site_sync_updats" => "report#retrieve_site_sync_updats"
+  get "/report/retrieve_lab_departments_tests" => "report#retrieve_lab_departments_tests"
 
 
   get "/setting/settings"       => "setting#settings"
@@ -27,6 +34,7 @@ Rails.application.routes.draw do
   get  "/test_Categories"           => "testcatelog#test_Categories"
   post "/home/add_account"       => "home#add_account"
   get  "/home/get_location"      => "home#get_location"
+
 
 
 end

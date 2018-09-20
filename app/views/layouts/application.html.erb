@@ -15,7 +15,14 @@
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">NLIMS Dashboard</a>
+                <a class="navbar-brand" href="#"><span style="color:black; font-weight:bold;"> MA </span> <span style="color:red;font-weight:bold;">LA </span> <span style="color:green;font-weight:bold;"> WI </span> NLIMS Dashboard</a>                
+            </div>
+            <div style="float: right; margin-top: 7px;padding-right:2%;"> 
+                <label id="err" style="display: none; padding-right:0%;"> </label>
+                <label style="color: lightgrey; font-weight: bold;">Log In: </label>                 
+                <input id="username"  placeholder="username" name="username" type="text" autofocus>               
+                <input id="password"  placeholder="Password" name="password" type="password" value="">
+                <button type="button" onclick="authenticate()" class="btn btn-sm btn-success btn-inline">Login</button>                 
             </div>
 
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">

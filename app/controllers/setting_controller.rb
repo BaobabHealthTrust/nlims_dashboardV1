@@ -31,6 +31,7 @@ class SettingController < ApplicationController
         DataMigration.load_slave_test_results
 
     end
-    
+
+  
 
 end

@@ -1,0 +1,642 @@
+
+            
+                  
+            <div class="row" style="border-bottom: thin solid lightgrey; margin-top: 60px;">
+                    <div  class="col-sm-2" style="border-right: thin solid lightgrey; margin-left: 2%; margin-bottom: 8px;">
+                        <select class="form-control" name="lab"  id="lab_selector">  
+                            <option onmousedown="getData();" value="all">All Labs -National Level</option>
+                            <option onmousedown="getData();" value="Kamuzu Central Hospital">Kamuzu Central Hospital</option>
+                            <option onmousedown="getData();" value="Queens Elizabeth Central Hospital">Queens Elizabeth Central Hospital</option>
+                            <option onmousedown="getData();" value="Thyolo District Hospital">Thyolo District Hospital</option>
+                            <option onmousedown="getData();" value="Zomba Central Hospital">Zomba Central Hospital</option>
+                            <option onmousedown="getData();" value="Mzuzu Central Hospital">Mzuzu Central Hospital</option>
+                            <option onmousedown="getData();" value="Mzimba District Hospital">Mzimba District Hospital</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-9">
+                        <label>Viewing Data For: <span style="color:green;" id="dep"></span> </label>
+                        <label style="margin-left: 10%;">Period: <span style="color:green;" id="from"> </span> -- <span id="to" style="color:green;"> </span></label>
+                        <label style="margin-left: 10%;">request account to access more data <a href="" style="color:red">REQUEST</a></label>
+                    </div>
+            </div>
+            
+           
+            <div class="row" style="margin-top: 30px; margin-left:2%;">
+                    <div class="col-sm-2" style="margin-right: 2.5%; border: thin solid lightblue;">
+                      
+                        <div class="col-xs-9" style="height: 120px; margin-top: 0px;" id="morris-donut-chart"> </div>
+                        <div class="col-xs-3 text-right">                                        
+                            <div>Ordered Tests</div>
+                        </div>
+                               
+                    </div>
+                    <div class="col-sm-2 " style="margin-right: 2.5%; border: thin solid lightblue;">
+                      
+                        <div class="col-xs-9" style="height: 120px; margin-top: 0px;" id="morris-donut-chart2"> </div>
+                        <div class="col-xs-3 text-right">                                        
+                            <div>Tests Verified</div>
+                        </div>
+                               
+                    </div>
+                    
+                    <div class="col-sm-2 " style="margin-right: 2.5%; border: thin solid lightblue;">
+                      
+                        <div class="col-xs-9" style="height: 120px; margin-top: 0px;" id="morris-donut-chart3"> </div>
+                        <div class="col-xs-3 text-right">                                        
+                            <div>Un-verified Tests</div>
+                        </div>
+                               
+                    </div>
+
+                    <div class="col-sm-2 " style="margin-right: 2.5%; border: thin solid lightblue;">
+                      
+                        <div class="col-xs-9" style="height: 120px; margin-top: 0px;" id="morris-donut-chart4"> </div>
+                        <div class="col-xs-3 text-right">                                        
+                            <div>Tests Pending</div>
+                        </div>
+                               
+                    </div>
+
+                    <div class="col-sm-2 " style="border: thin solid lightblue;">
+                      
+                        <div class="col-xs-9" style="height: 120px; margin-top: 0px;" id="morris-donut-chart5"> </div>
+                        <div class="col-xs-3 text-right">                                        
+                            <div>Tests Started</div>
+                        </div>
+                               
+                    </div>
+                   
+            </div>
+
+            <hr/ style="border-bottom: thin solid lightgrey;">
+            
+            <div class="row" style="margin-left: 2%">
+                <div class="col-sm-4 panel">
+                    <h4 class="panel panel-heading">Data Syncing Update</h4>
+                    <div class="panel-body">
+                        <div class="col-sm-8">
+                            <div id="morris-bar-chart"></div>
+                        </div>
+                        <div class="col-sm-4">
+                            <table>
+                                <tr>
+                                    <td style="font-weight: bold" >Syncing Status:</td>
+                                </tr>
+                                <tr>
+                                    <td id="sync_status">
+                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold">Last Synced:</td>
+                                </tr>
+                                <tr>
+                                    <td id="last_sync">
+                                        
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-7 panel" style="margin-left: 0.5%;">
+                        
+                        <div class="panel-body">
+                            <div class="col-sm-5">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Lab Department</th>
+                                            <th><span>Augusts</span> Tests</th>
+                                            <th><span>September</span> Tests</th>
+                                            <th><span>Total</span> Tests</th>
+                                        </tr>                                    
+                                    </thead>
+                                    <tbody  id="rowss">           
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                           
+                            <div class="col-sm-6">
+
+                            </div>
+                        </div>
+
+                    </div>                
+        </div>
+        <div class="row">
+                <div style="margin-left: 2%; margin-right: 2%;" class="panel">
+                    <h4 class="panel-heading">Tests Examining</h4>
+                    <table class="table" id="tests">
+                        <thead>
+                            <tr>
+                                <th>Test Name </th>
+                                <th>Short Name</th>
+                                <th>Target TAT</th>
+                                <th>Lab Department </th>
+                                <th>Specimen Types</th>
+                                <th>Analysis Frequency</th>                                    
+                            </tr>
+                        </thead> 
+                        <tbody>
+                            <% @sites.each do |st| %>
+                                <tr>
+                                    <td>
+                                        Culture and Sensitivity
+                                    </td>
+                                    <td>
+                                        CS
+                                    </td>
+                                    <td>
+                                        2 hrs
+                                    </td>
+                                    <td>
+                                        Haematology
+                                    </td>
+                                    <td>
+                                        Blood
+                                    </td>
+                                    <td>
+                                        <div style="border: thin solid lightgrey; padding: 5px; border-radius: 10px 10px;">
+                                            <label style="background-color: goldenrod; width: 50%; border-radius: 10px 10px; text-align: center;">
+                                                50%
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>   
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+
+    </body>
+</html>
+
+
+<script type="text/javascript">
+
+   
+
+
+    $(window).on("load", function(){
+        
+        getDataForNational();
+        $("#tests").dataTable();
+    })
+
+
+    function getDataForNational()
+    {
+        clearElements();
+            var option = document.getElementById("lab_selector").value;
+            document.getElementById("dep").innerHTML = " All Laboratories";
+            var url = "/report/retrieve_total_orders?option=" + "Kamuzu Central Hospital";
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            document.getElementById("from").innerHTML = getMonth(ress[3]) + " " + ress[3].substring(0,4);
+                            document.getElementById("to").innerHTML = getMonth(ress[2]) + " " + ress[2].substring(0,4);
+                             
+                            Morris.Donut({
+                                element: 'morris-donut-chart',
+                                data: [{
+                                    label: getMonth(ress[3]),
+                                    value: ress[1]
+                                }, {
+                                    label: getMonth(ress[2]),
+                                    value: ress[0]
+                                }],
+                                resize: true,
+                                height: "1px",
+                                redraw: true
+                            });
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+            
+            var url = "/report/retrieve_landing_page_data?option=" + "Kamuzu Central Hospital";
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            Morris.Donut({
+                                element: 'morris-donut-chart2',
+                                data: [{
+                                    label: getMonth(ress[3]),
+                                    value: ress[1]
+                                }, {
+                                    label: getMonth(ress[2]),
+                                    value: ress[0]
+                                }],
+                                resize: true,
+                                height: "1px",
+                                redraw: true
+                            });
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+
+            var url = "/report/retrieve_completed_tests?option=" + "Kamuzu Central Hospital";
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            Morris.Donut({
+                                element: 'morris-donut-chart3',
+                                data: [{
+                                    label: getMonth(ress[3]),
+                                    value: ress[1]
+                                }, {
+                                    label: getMonth(ress[2]),
+                                    value: ress[0]
+                                }],
+                                resize: true,
+                                height: "1px",
+                                redraw: true
+                            });
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+            
+
+            var url = "/report/retrieve_pending_tests?option=" + "Kamuzu Central Hospital";
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            Morris.Donut({
+                                element: 'morris-donut-chart4',
+                                data: [{
+                                    label: getMonth(ress[3]),
+                                    value: ress[1]
+                                }, {
+                                    label: getMonth(ress[2]),
+                                    value: ress[0]
+                                }],
+                                resize: true,
+                                height: "1px",
+                                redraw: true
+                            });
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+
+
+            var url = "/report/retrieve_rejected_tests?option=" + "Kamuzu Central Hospital";
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            Morris.Donut({
+                                element: 'morris-donut-chart5',
+                                data: [{
+                                    label: getMonth(ress[3]),
+                                    value: ress[1]
+                                }, {
+                                    label: getMonth(ress[2]),
+                                    value: ress[0]
+                                }],
+                                resize: true,
+                                height: "1px",
+                                redraw: true
+                            });
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+    }
+
+    function getMonth(period)
+    {
+        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ]
+        var month = period.substring(5,7);
+        if (month.substring(0,1) == 0)
+        {
+            month = monthNames[month.substring(1,2)-1];
+        }
+        else
+        {
+            month = monthNames[month-1];   
+        }
+        return month
+    }
+
+    function getData()
+    {   clearElements();
+        var option = document.getElementById("lab_selector").value;
+        if (option == "all")
+        {
+            getDataForNational();
+        }
+        else
+        {  
+            var url = "/report/retrieve_total_orders?option=" + option;
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            document.getElementById("from").innerHTML = getMonth(ress[3]) + " " + ress[3].substring(0,4);
+                            document.getElementById("to").innerHTML = getMonth(ress[2]) + " " + ress[2].substring(0,4);
+                            document.getElementById("dep").innerHTML = option + " Laboratory"; 
+                            Morris.Donut({
+                                element: 'morris-donut-chart',
+                                data: [{
+                                    label: getMonth(ress[3]),
+                                    value: ress[1]
+                                }, {
+                                    label: getMonth(ress[2]),
+                                    value: ress[0]
+                                }],
+                                resize: true,
+                                height: "1px",
+                                redraw: true
+                            });
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+
+            var url = "/report/retrieve_landing_page_data?option=" + option;
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            Morris.Donut({
+                                element: 'morris-donut-chart2',
+                                data: [{
+                                    label: getMonth(ress[3]),
+                                    value: ress[1]
+                                }, {
+                                    label: getMonth(ress[2]),
+                                    value: ress[0]
+                                }],
+                                resize: true,
+                                height: "1px",
+                                redraw: true
+                            });
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+
+            var url = "/report/retrieve_completed_tests?option=" + option;
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            Morris.Donut({
+                                element: 'morris-donut-chart3',
+                                data: [{
+                                    label: getMonth(ress[3]),
+                                    value: ress[1]
+                                }, {
+                                    label: getMonth(ress[2]),
+                                    value: ress[0]
+                                }],
+                                resize: true,
+                                height: "1px",
+                                redraw: true
+                            });
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+            
+
+            var url = "/report/retrieve_pending_tests?option=" + option;
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            Morris.Donut({
+                                element: 'morris-donut-chart4',
+                                data: [{
+                                    label: getMonth(ress[3]),
+                                    value: ress[1]
+                                }, {
+                                    label: getMonth(ress[2]),
+                                    value: ress[0]
+                                }],
+                                resize: true,
+                                height: "1px",
+                                redraw: true
+                            });
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+
+
+            var url = "/report/retrieve_rejected_tests?option=" + option;
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            Morris.Donut({
+                                element: 'morris-donut-chart5',
+                                data: [{
+                                    label: getMonth(ress[3]),
+                                    value: ress[1]
+                                }, {
+                                    label: getMonth(ress[2]),
+                                    value: ress[0]
+                                }],
+                                resize: true,
+                                height: "1px",
+                                redraw: true
+                            });
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+    
+            
+            var url = "/report/retrieve_site_sync_updats?option=" + option;
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            document.getElementById("from").innerHTML = getMonth(ress[3]) + " " + ress[3].substring(0,4);
+                            document.getElementById("to").innerHTML = getMonth(ress[2]) + " " + ress[2].substring(0,4);
+                            document.getElementById("dep").innerHTML = option + " Laboratory";
+                            var current = ress[0];
+                            var previous = ress[1];
+                            sync_status = ress[4];
+                            last_synced = ress[5];
+
+                            if (sync_status == true){
+                                var syn = document.getElementById("sync_status");
+                                syn.innerHTML = "Online";
+                                syn.style.color = "green";
+                                syn.style.font_weight = "bold";
+                                var last =  document.getElementById("last_sync");
+                                last.innerHTML = "Now";
+                                last.style.color = "green";      
+                            }
+                            else
+                            {
+                                var syn = document.getElementById("sync_status");
+                                syn.innerHTML = "Offline";
+                                syn.style.color = "red";
+                                var last =  document.getElementById("last_sync");
+                                last.innerHTML = last_synced;
+                                last.style.color = "red";                                
+                            }
+
+                            
+                            Morris.Bar({
+                                element: 'morris-bar-chart',
+                                data: [{
+                                    y: getMonth(ress[3]) + " " + ress[3].substring(0,4),
+                                    a: previous[0],
+                                    b: previous[1]
+                                }, {
+                                    y: getMonth(ress[2]) + " " + ress[2].substring(0,4),
+                                    a: current[0],
+                                    b: current[1]
+                                },],
+                                xkey: 'y',
+                                ykeys: ['a', 'b'],
+                                labels: ['Uptime', 'Downtime'],
+                                hideHover: 'auto',
+                                resize: true,
+                                barColors: ['skyblue','red']
+                            });
+
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+            
+            var tr = document.getElementById("rowss");
+            var url = "/report/retrieve_lab_departments_tests?option=" + option;
+            jQuery.ajax({
+                        async: false,
+                        url: url,
+                        success: function(res)
+                        { var ress = JSON.parse(res);
+                            var counter = 0;
+                            for (var i in ress)
+                            {
+                                var name = i;
+                                var curent = ress[name][0];
+                                var prev  = ress[name][1];
+                                var total = curent + prev;
+
+                                
+                                var row = tr.insertRow(counter);
+                                var cel = row.insertCell(0);
+                                cel.innerHTML = name;
+
+                                var cel = row.insertCell(1);
+                                cel.innerHTML = prev;
+
+                                var cel = row.insertCell(2);
+                                cel.innerHTML = curent;
+                                
+                                var cel = row.insertCell(3);
+                                cel.innerHTML = total;
+
+                                counter = counter + 1;
+                            }
+                        },
+                        error: function(err)
+                        {
+                            alert(err.responseText);
+                        }
+            });
+
+        }
+    }
+
+    function authenticate()
+    {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var url = "/authenticate?username=" +  username + "&password=" + password;
+
+        jQuery.ajax({
+                    async: false,
+                    url: url,
+                    success: function(res)
+                    {
+                
+                       
+                        if (res == "authenticated")
+                        {
+                            window.location = "/home";
+                        }
+                        else
+                        {   
+                            var er = document.getElementById("err");
+                            er.innerHTML = res;
+                            er.style.display = "inline";
+                            er.style.color = "red";
+                        }
+                    },
+                    error: function(err)
+                    {
+                        alert("bad");
+                    }
+        });
+        
+    }
+
+
+
+
+   
+    function clearElements()
+    {
+        document.getElementById("morris-donut-chart").innerHTML = "";
+        document.getElementById("morris-donut-chart2").innerHTML = "";
+        document.getElementById("morris-donut-chart3").innerHTML = "";
+        document.getElementById("morris-donut-chart4").innerHTML = "";
+        document.getElementById("morris-donut-chart5").innerHTML = "";
+    }
+
+
+
+</script>

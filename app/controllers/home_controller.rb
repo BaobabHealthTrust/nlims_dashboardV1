@@ -8,7 +8,9 @@ class HomeController < ApplicationController
 
 
     def login      
+        
         @login = true
+        @sites = Site.where(:enabled => true)	
     end
 
 

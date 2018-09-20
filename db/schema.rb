@@ -136,6 +136,7 @@ ActiveRecord::Schema.define(version: 2018_08_03_060256) do
     t.string "priority"
     t.string "order_status"
     t.string "order_status_resolved_to"
+    t.string "order_resolve_status"
   end
 
   create_table "slave_test_results", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
