@@ -1,0 +1,184 @@
+<div class="col-sm-offset-3 col-sm-6" style="height:800px; margin-top:70px; ">
+    <div style="border-bottom: thin solid lightgrey; padding-bottom: 15px;"> 
+            <span style="font-weight:bold;font-size:160%;"> Account Request </span>          
+    </div>
+
+    <div style="margin-top:15px; border-bottom: thin solid lightgrey; padding-bottom:15px;" id='personal'>
+       
+            <div class="row">
+                <div class="col-sm-offset-3 col-sm-6" >
+                    <label>First Name: </label>
+                    <input type="text" name="name"  class="form-control" id="f_name">
+                </div>               
+            </div>   
+            
+            <div class="row" style="margin-top:15px;">
+                <div class="col-sm-offset-3 col-sm-6" >
+                    <label>Last Name: </label>
+                    <input type="text" name="name"  class="form-control" id="l_name">
+                </div>               
+            </div>   
+
+            <div class="row" style="margin-top:15px;">
+                <div class="col-sm-offset-3 col-sm-6" >
+                    <label>Email: </label>
+                    <input type="email" name="name"  class="form-control" id="email">
+                </div>               
+            </div>   
+
+
+            <div class="row" style="margin-top:15px;">
+                <div class="col-sm-offset-3 col-sm-6" >
+                    <label>Proffession: </label>
+                    <input type="text" name="name"  class="form-control" id="proffession">
+                </div>               
+            </div>   
+
+
+            <div class="row" style="margin-top:15px;">
+                <div class="col-sm-offset-3 col-sm-6" >
+                    <label>Organisation: </label>
+                    <input type="text" name="name"  class="form-control" id="organisation">
+                </div>               
+            </div>   
+
+
+            <div class="row" style="margin-top:15px;">
+                <div class="col-sm-offset-3 col-sm-6" >
+                    <label>Organisation Website: </label>
+                    <input type="text" name="name"  class="form-control" id="website">
+                </div>               
+            </div>   
+
+            <div class="row" style="margin-top:15px;">
+                <div class="col-sm-offset-3 col-sm-6" >
+                    <label>Phyisal Address: </label>
+                    <textarea class="form-control" id="physical"> </textarea> 
+                </div>               
+            </div>  
+
+            <div class="row" style="margin-top:15px;">
+                <div class="col-sm-offset-3 col-sm-6" >
+                    <label>Reason for accessing malawi national LIMS data: </label>
+                    <textarea class="form-control" id="reason"> </textarea> 
+                </div>               
+            </div>  
+            
+    </div>
+    <div style="margin-top:15px; border-bottom: thin solid lightgrey; padding-bottom:15px; display:none;" id='account'>       
+        <div class="row">
+            <div class="col-sm-offset-3 col-sm-6" >
+                <label>Username: </label>
+                <input type="text" name="name"  class="form-control">
+            </div>               
+        </div>   
+        
+        <div class="row" style="margin-top:15px;">
+            <div class="col-sm-offset-3 col-sm-6" >
+                <label>Password: </label>
+                <input type="password" name="name"  class="form-control">
+            </div>               
+        </div>     
+    </div>
+
+    <div style="margin-top:15px; border-bottom: thin solid lightgrey; padding-bottom:15px; display:none;" id='confirmation'>       
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-10 col-sm-offset-1">
+                <p style="color:green;font-weight:bold;font-size:2em;">Account successfuly requested!!</p>
+                <p style="margin-bottom:25px;color:red;font-weight:bold;">Account request feedback will be sent to your email within FIVE working days</p>     
+         
+        
+                <table class="table">
+                    <tr>
+                        <td style="font-weight:bold;">Name </td>
+                        <td id="name_c"> </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-weight:bold;">Email </td>
+                        <td id="email_c"> </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-weight:bold;">Proffession </td>
+                        <td id="proffession_c"> </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-weight:bold;">Organisation </td>
+                        <td id="organisation_c" > </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-weight:bold;">Organisation Website  </td>
+                        <td id="website_c" > </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-weight:bold;">Physical Address </td>
+                        <td id="physisal_c" > </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-weight:bold;">Reason for accessing malawi national LIMS data</td>
+                        <td id="reason_c" > </td>
+                    </tr>
+                </table>
+              
+            </div>
+        </div>
+    </div>
+
+    <div style="border-bottom: thin solid lightgrey; padding-bottom: 15px;padding-top:15px;" id="next_button"> 
+        <input type="button" value="Cancel" class="btn btn-lg btn-danger" onclick="goBack()">
+        <input type="button" value="Next >>>" class="btn btn-lg btn-primary" onclick="loadNext()">
+    </div>
+
+    <div style="border-bottom: thin solid lightgrey; padding-bottom: 15px;padding-top:15px;display:none;" id="request_button"> 
+        <input type="button" value="Request" class="btn btn-lg btn-primary" onclick="accountRequest()">
+    </div>
+
+    <div style="border-bottom: thin solid lightgrey; padding-bottom: 15px;padding-top:15px;display:none;" id="done"> 
+        <input type="button" value="Done" class="btn btn-lg btn-primary" onclick="goBack()">
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+    function goBack()
+    {
+        window.location = '/';
+    }
+
+    function loadNext()
+    {
+        document.getElementById('next_button').style.display = "none";
+        document.getElementById('personal').style.display = "none";
+        document.getElementById('request_button').style.display = "block";
+        document.getElementById('account').style.display = "block";
+        
+    }
+
+    function accountRequest()
+    {
+        document.getElementById('next_button').style.display = "none";
+        document.getElementById('personal').style.display = "none";
+        document.getElementById('request_button').style.display = "none";
+        document.getElementById('account').style.display = "none";
+        document.getElementById('confirmation').style.display = "block";
+        document.getElementById('done').style.display = "block";
+
+        document.getElementById('name_c').innerHTML =  ":" + document.getElementById('f_name').value + " " + document.getElementById('l_name').value
+        document.getElementById('email_c').innerHTML =  document.getElementById('email').value
+        document.getElementById('proffession_c').innerHTML =  document.getElementById('proffession').value
+        document.getElementById('organisation_c').innerHTML =  document.getElementById('organisation').value
+        document.getElementById('website_c').innerHTML =  document.getElementById('website').value
+        document.getElementById('physisal_c').innerHTML =  document.getElementById('physical').value
+        document.getElementById('reason_c').innerHTML =  document.getElementById('reason').value
+             
+
+    }
+
+</script>

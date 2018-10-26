@@ -4,15 +4,14 @@ class HomeController < ApplicationController
         @sites = Site.where(:enabled => true)		
     end
 
+    def account_request_form_handler
+        @request = true
+    end
 
-
-
-    def login      
-        
+    def login              
         @login = true
         @sites = Site.where(:enabled => true)	
     end
-
 
     def authenticate
         username = params[:username]
@@ -85,6 +84,5 @@ class HomeController < ApplicationController
         rs = Site.find_by_sql("SELECT DISTINCT sites.district AS dist FROM sites")
         render plain: rs.to_json and return
     end
-
 
 end

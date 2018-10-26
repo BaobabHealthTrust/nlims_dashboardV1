@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "home#login"
-
+  get '/'             => "home#login"
 
   get "/report/moh_report" => "report#moh_report"
   get "report/retrieve_data_moh_report" => "report#retrieve_data_moh_report"
@@ -34,6 +34,9 @@ Rails.application.routes.draw do
   get  "/test_Categories"           => "testcatelog#test_Categories"
   post "/home/add_account"       => "home#add_account"
   get  "/home/get_location"      => "home#get_location"
+
+
+  get "/home/account_request"     => "home#account_request_form_handler"
 
 
 
